@@ -1,0 +1,9 @@
+Reorder Policy — Small Electronics Store
+
+When current stock is at or below the reorder level for a product, place a reorder immediately.
+
+Standard reorder quantity: bring stock up to 2× the reorder level (minimum one case pack where applicable).
+
+Low-stock items are flagged daily. Operations must review the inventory CSV and open a purchase request within 1 business day.
+
+Priority: products more than 50% below reorder level are urgent (e.g. stock 5 vs level 15).

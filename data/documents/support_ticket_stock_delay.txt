@@ -1,0 +1,7 @@
+Support Ticket — Stock Delay
+
+Ticket ID: STK-1042
+Product: Laptop
+Issue: Shipment from TechSupplierA delayed 4 days. Current stock 10, reorder level 20.
+Action: Expedite reorder placed 2026-05-28; customer pre-orders on hold until restock.
+Status: Open

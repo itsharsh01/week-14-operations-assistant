@@ -1,0 +1,5 @@
+product_name,current_stock,reorder_level,supplier
+Laptop,10,20,TechSupplierA
+Monitor,25,20,DisplayWorld
+Keyboard,5,15,InputTech
+Mouse,40,20,InputTech

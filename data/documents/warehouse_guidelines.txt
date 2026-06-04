@@ -1,0 +1,9 @@
+Warehouse Guidelines
+
+Receive shipments: verify count against packing slip; note damage on delivery receipt.
+
+Storage: laptops and monitors on labeled shelves; keyboards/mice in bin A-12.
+
+Stock counts: update inventory CSV after each receipt or significant sale batch.
+
+Report stock delays or damaged inbound goods using the support ticket templates.

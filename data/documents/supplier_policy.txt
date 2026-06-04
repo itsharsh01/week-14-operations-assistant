@@ -1,0 +1,9 @@
+Supplier Contact Policy
+
+Contact the supplier listed on the inventory record for each low-stock product.
+
+TechSupplierA — Laptops. Email: orders@techsuppliera.example. Lead time: 5–7 days.
+DisplayWorld — Monitors. Email: sales@displayworld.example. Lead time: 3–5 days.
+InputTech — Keyboards and mice. Email: restock@inputtech.example. Lead time: 2–4 days.
+
+For multiple low-stock items from the same supplier, combine into one order when possible.
