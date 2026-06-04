@@ -1,0 +1,8 @@
+# Operations assistant only — do not share port 8501 with MarketMind
+[server]
+port = 8502
+address = "localhost"
+
+[browser]
+serverAddress = "localhost"
+gatherUsageStats = false
