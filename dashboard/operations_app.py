@@ -103,10 +103,6 @@ def main() -> None:
         page_icon="📦",
         layout="wide",
     )
-    st.success(
-        "**Week 14 Operations Inventory Assistant** — "
-        "If you see MarketMind, close that tab and use **http://localhost:8502**"
-    )
     st.title("Operations Inventory Assistant")
     st.caption(
         f"Project: `{PROJECT_ROOT.name}` · MCP crew + proof traces · Port **8502**"
