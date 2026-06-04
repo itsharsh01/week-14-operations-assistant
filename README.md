@@ -1,5 +1,27 @@
 # Week 14 Operations Assistant
 
+Small electronics store operations assistant: FastMCP server + CrewAI crew for single-query workflows.
+
+**Requires Python 3.12** (CrewAI/chromadb are not compatible with 3.14).
+
+## Crew (single query)
+
+Copy `.env.example` to `.env` and set `GROQ_API_KEY`.
+
+```bash
+python run_crew.py "Which products need reordering?"
+```
+
+Default query runs if you omit the argument. Full traces go to `traces/`; reports to `reports/`.
+
+## Streamlit dashboard
+
+```bash
+streamlit run dashboard/app.py
+```
+
+Ask a question in the UI to see the answer, **proof** (which files/tools produced each fact), and a per-tool execution trace.
+
 ## MCP server (FastMCP)
 
 Install dependencies:

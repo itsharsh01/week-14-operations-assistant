@@ -49,6 +49,15 @@ class InventoryItem(BaseModel):
     supplier: str
 
 
+class ReadInventoryInput(BaseModel):
+    """Input for read_inventory."""
+
+    low_stock_only: bool = Field(
+        default=False,
+        description="If true, return only products at or below reorder level",
+    )
+
+
 class ReadInventoryOutput(BaseModel):
     """Output from read_inventory."""
 

@@ -5,12 +5,13 @@ from pathlib import Path
 from fastmcp import FastMCP
 
 if __package__:
-    from . import resources
+    from . import resources, trace_log
     from .schemas import (
         DocumentMatch,
         InventoryItem,
         ReadDocumentInput,
         ReadDocumentOutput,
+        ReadInventoryInput,
         ReadInventoryOutput,
         SaveReportInput,
         SaveReportOutput,
@@ -19,11 +20,13 @@ if __package__:
     )
 else:
     import resources
+    import trace_log
     from schemas import (
         DocumentMatch,
         InventoryItem,
         ReadDocumentInput,
         ReadDocumentOutput,
+        ReadInventoryInput,
         ReadInventoryOutput,
         SaveReportInput,
         SaveReportOutput,
@@ -36,7 +39,7 @@ def register_tools(mcp: FastMCP) -> None:
     """Register all tools on the given FastMCP server instance."""
 
     @mcp.tool
-    def ping() -> str:
+    def ping(check: str = "ok") -> str:
         """Health check. Returns a short confirmation that the MCP server is running."""
         return "Operations Inventory MCP server is running."
 
@@ -45,13 +48,19 @@ def register_tools(mcp: FastMCP) -> None:
         """Find relevant policy, product, and support documents by keyword query."""
         params = SearchDocumentsInput(query=query, limit=limit)
         rows = resources.search_documents(params.query, params.limit)
-        return SearchDocumentsOutput(
+        output = SearchDocumentsOutput(
             query=params.query,
             matches=[
                 DocumentMatch(filename=name, snippet=snippet, score=score)
                 for name, snippet, score in rows
             ],
         )
+        trace_log.log_tool_call(
+            "search_documents",
+            {"query": params.query, "limit": params.limit},
+            output,
+        )
+        return output
 
     @mcp.tool
     def read_documents(filename: str) -> ReadDocumentOutput:
@@ -63,14 +72,21 @@ def register_tools(mcp: FastMCP) -> None:
             raise ValueError(str(e)) from e
         except ValueError as e:
             raise ValueError(str(e)) from e
-        return ReadDocumentOutput(
+        output = ReadDocumentOutput(
             filename=Path(params.filename).name,
             content=content,
         )
+        trace_log.log_tool_call(
+            "read_documents",
+            {"filename": params.filename},
+            output,
+        )
+        return output
 
     @mcp.tool
-    def read_inventory() -> ReadInventoryOutput:
+    def read_inventory(low_stock_only: bool = False) -> ReadInventoryOutput:
         """Get structured inventory data from data/inventory.csv."""
+        params = ReadInventoryInput(low_stock_only=low_stock_only)
         rows = resources.load_inventory()
         items = [
             InventoryItem(
@@ -81,18 +97,36 @@ def register_tools(mcp: FastMCP) -> None:
             )
             for row in rows
         ]
+        if params.low_stock_only:
+            items = [
+                item
+                for item in items
+                if item.current_stock <= item.reorder_level
+            ]
         low_stock = sum(
             1 for item in items if item.current_stock <= item.reorder_level
         )
-        return ReadInventoryOutput(items=items, low_stock_count=low_stock)
+        output = ReadInventoryOutput(items=items, low_stock_count=low_stock)
+        trace_log.log_tool_call(
+            "read_inventory",
+            {"low_stock_only": params.low_stock_only},
+            output,
+        )
+        return output
 
     @mcp.tool
     def save_report(title: str, content: str) -> SaveReportOutput:
         """Save an operations report to the reports/ directory as markdown."""
         params = SaveReportInput(title=title, content=content)
         path = resources.save_report_file(params.title, params.content)
-        return SaveReportOutput(
+        output = SaveReportOutput(
             filename=path.name,
             path=str(path),
             message=f"Report saved to {path.name}",
         )
+        trace_log.log_tool_call(
+            "save_report",
+            {"title": params.title, "content_length": len(params.content)},
+            output,
+        )
+        return output
